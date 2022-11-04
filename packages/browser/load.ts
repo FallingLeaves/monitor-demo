@@ -1,0 +1,73 @@
+import { breadcrumb, handleConsole } from "../core";
+import { BREADCRUMBTYPES, EVENTTYPES } from "../shared";
+import { htmlElementAsString, Severity } from "../utils";
+import { HandleEvents } from "./handleEvents";
+import { addReplaceHandler } from "./replace";
+
+export function setupRaplace() {
+	addReplaceHandler({
+		callback: (data) => {
+			HandleEvents.handleHttp(data, BREADCRUMBTYPES.XHR);
+		},
+		type: EVENTTYPES.XHR,
+	});
+
+	addReplaceHandler({
+		callback: (data) => {
+			HandleEvents.handleHttp(data, BREADCRUMBTYPES.FETCH);
+		},
+		type: EVENTTYPES.FETCH,
+	});
+
+	addReplaceHandler({
+		callback: (data) => {
+			HandleEvents.handleError(data);
+		},
+		type: EVENTTYPES.ERROR,
+	});
+
+	// addReplaceHandler({
+	// 	callback: (data) => {
+	// 		handleConsole(data);
+	// 	},
+	// 	type: EVENTTYPES.CONSOLE,
+	// });
+
+	addReplaceHandler({
+		callback: (data) => {
+			HandleEvents.handleHistory(data);
+		},
+		type: EVENTTYPES.HISTORY,
+	});
+
+	addReplaceHandler({
+		callback: (data) => {
+			HandleEvents.handleUnhandleRejection(data);
+		},
+		type: EVENTTYPES.UNHANDLEDERJECTION,
+	});
+
+	addReplaceHandler({
+		callback: (data) => {
+			const htmlString = htmlElementAsString(
+				data.data.activeElement as HTMLBRElement
+			);
+			if (htmlString) {
+				breadcrumb.push({
+					type: BREADCRUMBTYPES.CLICK,
+					category: breadcrumb.getCategory(BREADCRUMBTYPES.CLICK),
+					data: htmlString,
+					level: Severity.Info,
+				});
+			}
+		},
+		type: EVENTTYPES.DOM,
+	});
+
+	addReplaceHandler({
+		callback: (data) => {
+			HandleEvents.handleHashchange(data);
+		},
+		type: EVENTTYPES.HASHCHANGE,
+	});
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<button id="codeErr" onclick="codeError()">代码错误</button>
+		<button id="normalReq" onclick="onClickXhrNormal()">xhr正常请求</button>
+		<button id="exceptionReq" onclick="onClickXhrError()">xhr异常请求</button>
+		<button id="normalFetch" onclick="onClickNativeFetch()">
+			Fetch正常请求
+		</button>
+		<button id="exceptionFetch" onclick="onClickNativeErrorFetch()">
+			Fetch异常请求
+		</button>
+		<button id="promiseError" onclick="promiseError()">promiseError</button>
+		<button id="hashChange" onclick="hashChange()">改变hash</button>
+
+		<!-- <script>
+			window.Monit.init({
+				// dsn: "http://localhost:2021/errors/upload",
+				throttleDelayTime: 0,
+				maxBreadcrumbs: 100,
+				onRouteChange(from, to) {
+					console.log("onRouteChange: _", from, to);
+				},
+			});
+		</script> -->
+
+		<script>
+			function codeError() {
+				console.log(123);
+				let a = {};
+				a.split("/");
+			}
+			function promiseError() {
+				const promiseWrap = () =>
+					new Promise((resolve, reject) => {
+						reject("promise reject");
+					});
+				promiseWrap().then((res) => {
+					console.log("res", res);
+				});
+			}
+			function hashChange() {
+				window.location.hash = "xxx";
+			}
+			function onClickNativeFetch() {
+				fetch("/normal/post", {
+					method: "POST",
+					body: JSON.stringify({ test: "测试请求体" }),
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}).then((res) => {
+					res.text().then((res) => console.log("res", res));
+				});
+			}
+			function onClickNativeErrorFetch() {
+				fetch("/exception/post", {
+					method: "POST",
+					body: JSON.stringify({ test: "测试请求体" }),
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}).then(
+					(res) => {
+						res.text().then((res) => console.log("res", res));
+					},
+					(err) => {
+						console.log("err", err);
+					}
+				);
+			}
+			function onClickXhrNormal() {
+				console.log("12312");
+				const xhr = new XMLHttpRequest();
+				xhr.open("get", "/normal");
+				xhr.setRequestHeader("content-type", "application/json");
+				xhr.send();
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4) {
+						console.log(xhr.responseText);
+					}
+				};
+			}
+			function onClickXhrError() {
+				const xhr = new XMLHttpRequest();
+				xhr.open("get", "/exception");
+				xhr.setRequestHeader("content-type", "application/json");
+				xhr.send();
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4) {
+						console.log(xhr.responseText);
+					}
+				};
+			}
+		</script>
+	</body>
+</html>
