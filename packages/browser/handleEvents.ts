@@ -15,12 +15,18 @@ import { Replace, ReportDataType } from "../types";
 import {
 	extractErrorStack,
 	getLocationHref,
+	htmlElementAsString,
 	isError,
 	parseUrlToObj,
 	Severity,
 	unknownToString,
 } from "../utils";
 import { MITOHttp, ResourceErrorTarget } from "../types/common";
+
+function isFilterDOM(tagName: string) {
+	return options.filterDOMRegExp && options.filterDOMRegExp.test(tagName);
+}
+
 const HandleEvents = {
 	// 处理xhr fetch
 	handleHttp(data: MITOHttp, type: BREADCRUMBTYPES) {
@@ -173,6 +179,32 @@ const HandleEvents = {
 			level: Severity.Error,
 		});
 		transportData.send(data);
+	},
+	handleDOMClick(event: HTMLDocument) {
+		const activeElement = event.activeElement as HTMLElement;
+		if (isFilterDOM(activeElement.tagName.toLowerCase())) {
+			return;
+		}
+		const htmlString = htmlElementAsString(activeElement);
+		if (htmlString) {
+			breadcrumb.push({
+				type: BREADCRUMBTYPES.CLICK,
+				category: breadcrumb.getCategory(BREADCRUMBTYPES.CLICK),
+				data: htmlString,
+				level: Severity.Info,
+			});
+			if (options.reportUIClick) {
+				let data: ReportDataType = {
+					type: BREADCRUMBTYPES.CLICK,
+					url: getLocationHref(),
+					name: activeElement.innerText,
+					time: Date.now(),
+					level: Severity.Info,
+					message: htmlString,
+				};
+				transportData.send(data);
+			}
+		}
 	},
 };
 

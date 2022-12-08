@@ -1,4 +1,4 @@
-import { breadcrumb, handleConsole } from "../core";
+import { breadcrumb, handleConsole, transportData } from "../core";
 import { BREADCRUMBTYPES, EVENTTYPES } from "../shared";
 import { htmlElementAsString, Severity } from "../utils";
 import { HandleEvents } from "./handleEvents";
@@ -49,17 +49,7 @@ export function setupRaplace() {
 
 	addReplaceHandler({
 		callback: (data) => {
-			const htmlString = htmlElementAsString(
-				data.data.activeElement as HTMLBRElement
-			);
-			if (htmlString) {
-				breadcrumb.push({
-					type: BREADCRUMBTYPES.CLICK,
-					category: breadcrumb.getCategory(BREADCRUMBTYPES.CLICK),
-					data: htmlString,
-					level: Severity.Info,
-				});
-			}
+			HandleEvents.handleDOMClick(data.data);
 		},
 		type: EVENTTYPES.DOM,
 	});

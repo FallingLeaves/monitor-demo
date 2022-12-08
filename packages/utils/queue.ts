@@ -44,7 +44,10 @@ export class Queue {
 		this.isFlushing = false;
 		for (let i = 0; i < temp.length; i++) {
 			const fn = temp[i];
-			fn();
+			try {
+				fn();
+			} catch (error) {
+			}
 		}
 	}
 }

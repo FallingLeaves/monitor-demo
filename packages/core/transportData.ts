@@ -91,7 +91,7 @@ export class TransportData {
 		if (validateOption(apiKey, "apiKey", "string")) {
 			this.apiKey = apiKey;
 		}
-		if (validateOption(useImgUpload, "useImgUpload", "string")) {
+		if (validateOption(useImgUpload, "useImgUpload", "boolean")) {
 			this.useImgUpload = useImgUpload;
 		}
 		if (validateOption(beforeDataReport, "beforeDataReport", "function")) {

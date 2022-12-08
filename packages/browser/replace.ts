@@ -63,7 +63,6 @@ function xhrReplace(): void {
 	}
 	const originalXhrProto = XMLHttpRequest.prototype;
 	replaceOld(originalXhrProto, "open", (originalOpen: voidFun): voidFun => {
-
 		return function (this: MITOXMLHttpRequest, ...args: any[]): void {
 			this.mito_xhr = {
 				method: variableType.isString(args[0])
@@ -79,7 +78,6 @@ function xhrReplace(): void {
 	});
 
 	replaceOld(originalXhrProto, "send", (originalSend: voidFun): voidFun => {
-
 		return function (this: MITOXMLHttpRequest, ...args: any[]): void {
 			const { method, url } = this.mito_xhr;
 			if (options.beforeAppAjaxSend) {

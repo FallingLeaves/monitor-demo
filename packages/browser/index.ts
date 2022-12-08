@@ -1,6 +1,6 @@
 import { _global } from "../utils";
 import { InitOptions } from "../types";
-import { initOptions } from "../core";
+import { initOptions, log } from "../core";
 import { setupRaplace } from "./load";
 
 function initWeb(options: InitOptions = {}) {
@@ -15,12 +15,12 @@ function init(options: InitOptions = {}) {
 	initWeb(options);
 }
 
-export { init };
+export { init, log };
 
 // init({
 // 	// dsn: "http://localhost:2021/errors/upload",
-	// throttleDelayTime: 0,
-	// onRouteChange(from, to) {
-	// 	console.log("onRouteChange: _", from, to);
-	// },
+// throttleDelayTime: 0,
+// onRouteChange(from, to) {
+// 	console.log("onRouteChange: _", from, to);
+// },
 // });

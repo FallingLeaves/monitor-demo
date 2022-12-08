@@ -31,3 +31,5 @@ export interface ResourceErrorTarget {
 	href?: string;
 	localName?: string;
 }
+
+export type TNumStrObj = number | string | object;

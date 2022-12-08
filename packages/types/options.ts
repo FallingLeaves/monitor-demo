@@ -42,9 +42,11 @@ export interface InitOptions extends EventTypes, HooksTypes, BrowserHooksTypes {
 	debug?: boolean;
 	//
 	filterXhrUrlRegExp?: RegExp;
+	filterDOMRegExp?: RegExp;
 	maxBreadcrumbs?: number;
 	throttleDelayTime?: number;
 	maxDuplicateCount?: number;
+	reportUIClick?: boolean;
 }
 
 export interface EventTypes {
