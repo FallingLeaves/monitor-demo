@@ -180,10 +180,10 @@ function fetchReplace(): void {
 						if (isFilterHttpUrl(url)) {
 							return;
 						}
-						handlerData.responseText =
-							tempRes.status > HTTP_CODE.UNAUTHORIZED && data;
+						handlerData.responseText = data;
 						triggerHandlers(EVENTTYPES.FETCH, handlerData);
 					});
+					return res
 				},
 				(err: Error) => {
 					const eTime = Date.now();
